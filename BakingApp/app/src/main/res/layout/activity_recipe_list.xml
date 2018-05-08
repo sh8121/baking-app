@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.bakingapp.com.example.android.bakingapp.recipelist.RecipeListActivity">
+    tools:context="com.example.android.bakingapp.recipelist.RecipeListActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_recipe_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:spanCount="1"/>
+        app:spanCount="1" />
 </android.support.constraint.ConstraintLayout>

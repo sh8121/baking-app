@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">BakingApp</string>
+    <string name="food_title_label">Food Title</string>
     <string name="serving_label">Servings</string>
+    <string name="ingredient_format">%1$s-%2$.1f(%3$s)</string>
+    <string name="measure_label">Measure</string>
+    <string name="quantity_label">Quantity</string>
+    <string name="button_prev_label">PREV</string>
+    <string name="button_next_label">NEXT</string>
+    <string name="add_widget">Add widget</string>
 </resources>
