@@ -2,9 +2,11 @@ package com.example.android.bakingapp.recipedetail;
 
 import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mConfig = getResources().getConfiguration();
         mStepListContainer = findViewById(R.id.step_list_container);
         mStepDetailContainer = findViewById(R.id.step_detail_container);
@@ -125,5 +128,16 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepListA
         else{
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

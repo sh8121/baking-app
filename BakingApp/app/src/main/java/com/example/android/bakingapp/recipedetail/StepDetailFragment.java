@@ -48,9 +48,13 @@ import java.util.List;
  */
 
 public class StepDetailFragment extends Fragment implements ExoPlayer.EventListener{
+    private static final String EXOPLAYER_READY_KEY = "EXOPLAYER_READY";
+    private static final String EXOPLAYER_TIME_KEY = "EXOPLAYER_TIME";
+
     private Configuration mConfig;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mExoPlayerView;
+    private MediaSource mMediaSource;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStatebuilder;
     private ImageView mThumnailImageView;
@@ -77,7 +81,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         mStepDetailNextButton = rootView.findViewById(R.id.step_detail_next);
 
         if(!TextUtils.isEmpty(stepList.get(position).getVideoURL())){
-            initializePlayer(Uri.parse(stepList.get(position).getVideoURL()));
+            initializePlayer(Uri.parse(stepList.get(position).getVideoURL()), savedInstanceState);
         }
         else if(!TextUtils.isEmpty(stepList.get(position).getThumbnailURL())){
             initializeThumnailImageView(Uri.parse(stepList.get(position).getThumbnailURL()));
@@ -92,6 +96,23 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
             initializeStepDetailPrevNext(stepList, position);
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if(mExoPlayer != null){
+            outState.putBoolean(EXOPLAYER_READY_KEY, mExoPlayer.getPlayWhenReady());
+            outState.putLong(EXOPLAYER_TIME_KEY, mExoPlayer.getCurrentPosition());
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        if(mExoPlayer != null && mMediaSource != null){
+            mExoPlayer.prepare(mMediaSource, false, false);
+        }
+        super.onResume();
     }
 
     @Override
@@ -110,7 +131,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         super.onDestroyView();
     }
 
-    private void initializePlayer(Uri mediaUri){
+    private void initializePlayer(Uri mediaUri, Bundle bundle){
         if(mExoPlayer == null){
             mExoPlayerView.setVisibility(View.VISIBLE);
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -121,9 +142,19 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
             mExoPlayer.addListener(this);
 
             String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-            mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mMediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+            mExoPlayer.prepare(mMediaSource);
+
+            boolean playWhenReady = true;
+            long playPosition = 0;
+
+            if(bundle != null){
+                playWhenReady = bundle.getBoolean(EXOPLAYER_READY_KEY);
+                playPosition = bundle.getLong(EXOPLAYER_TIME_KEY);
+            }
+
+            mExoPlayer.seekTo(playPosition);
+            mExoPlayer.setPlayWhenReady(playWhenReady);
         }
     }
 

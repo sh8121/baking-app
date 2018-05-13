@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/iv_step_thumbnail"
+        android:layout_width="@dimen/recycler_view_image_width"
+        android:layout_height="@dimen/recycler_view_image_height"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/tv_step_short_desc"
         android:layout_width="match_parent"
@@ -12,4 +17,4 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

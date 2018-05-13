@@ -2,11 +2,14 @@ package com.example.android.bakingapp.recipedetail;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.data.Step;
 
@@ -54,15 +57,24 @@ public class StepListAdapter extends RecyclerView.Adapter {
 
     class StepListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        private ImageView mStepThumbnail;
         private TextView mStepShortDesc;
 
         public StepListViewHolder(View itemView) {
             super(itemView);
+            mStepThumbnail = itemView.findViewById(R.id.iv_step_thumbnail);
             mStepShortDesc = itemView.findViewById(R.id.tv_step_short_desc);
             itemView.setOnClickListener(this);
         }
 
         public void bind(Step step){
+            if(!TextUtils.isEmpty(step.getThumbnailURL())){
+                Glide.with(mContext).load(step.getThumbnailURL()).into(mStepThumbnail);
+                mStepThumbnail.setVisibility(View.VISIBLE);
+            }
+            else{
+                mStepThumbnail.setVisibility(View.GONE);
+            }
             mStepShortDesc.setText(step.getShortDescription());
         }
 
