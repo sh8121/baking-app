@@ -2,11 +2,14 @@ package com.example.android.bakingapp.recipelist;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.data.RecipeSummary;
 
@@ -55,17 +58,26 @@ public class RecipeListAdapter extends RecyclerView.Adapter {
     }
 
     class RecipeListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private ImageView mIvRecipeImage;
         private TextView mTvRecipeName;
         private TextView mTvRecipeServings;
 
         public RecipeListViewHolder(View itemView) {
             super(itemView);
+            mIvRecipeImage = itemView.findViewById(R.id.iv_recipe_image);
             mTvRecipeName = itemView.findViewById(R.id.tv_recipe_name);
             mTvRecipeServings = itemView.findViewById(R.id.tv_recipe_servings);
             itemView.setOnClickListener(this);
         }
 
         public void bind(RecipeSummary recipeSummary){
+            if(!TextUtils.isEmpty(recipeSummary.getImage())){
+                mIvRecipeImage.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(recipeSummary.getImage()).into(mIvRecipeImage);
+            }
+            else{
+                mIvRecipeImage.setVisibility(View.GONE);
+            }
             mTvRecipeName.setText(recipeSummary.getName());
             mTvRecipeServings.setText(String.valueOf(recipeSummary.getServings()));
         }
